@@ -1,12 +1,15 @@
-package com.university.registration;
+package com.University_Course_Registration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class main {
-    public static void main(String[] args) {
-        SpringApplication.run(main.class, args);
-    }
-}
 
+
+	public static void main(String[] args) {
+		SpringApplication.run(main.class, args);
+	}
+
+
+}
