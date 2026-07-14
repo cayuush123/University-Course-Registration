@@ -1,4 +1,4 @@
-package com.University_Course_Registration;
+package com.university.registration;
 
 public class student {
 
