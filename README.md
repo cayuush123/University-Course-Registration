@@ -169,7 +169,7 @@ Cloud AI / Antigravity AI: Used for code review, debugging, and implementation s
 All final coding, testing, verification, and project decisions were completed by me. I take full responsibility for the accuracy and integrity of this project.
 
 # Author
-Aisha Mohamud Muse
-Anfac Hirsi
+**Aisha Mohamud Muse**
+**Anfac Hirsi**
 
 
