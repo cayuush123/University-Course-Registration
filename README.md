@@ -10,12 +10,16 @@ The University Course Registration System is a web-based application that simpli
 ---
 
 Project Objectives
+
+
 Automate course registration.
 Manage students, lecturers, departments, and courses.
 Handle enrollments, grades, and timetables.
 Secure the system using JWT Authentication and Role-Based Access Control.
 
 Features
+
+
 User Login and Registration
 JWT Authentication
 Role-Based Access (Admin, Lecturer, Student)
@@ -165,7 +169,6 @@ Cloud AI / Antigravity AI: Used for code review, debugging, and implementation s
 All final coding, testing, verification, and project decisions were completed by me. I take full responsibility for the accuracy and integrity of this project.
 
 # Author
-
 Aisha Mohamud Muse
 Anfac Hirsi
 
