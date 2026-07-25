@@ -419,10 +419,7 @@ Only authenticated users with the appropriate role can access protected resource
 
 # Author
 
-**Aisha Mohamud Muse**
+Aisha Mohamud Muse
+Anfac Hirsi
 
-Final Year Project
 
-Bachelor of Computer Science
-
-University Course Registration System
