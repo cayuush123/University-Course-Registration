@@ -3,7 +3,9 @@ package com.university.registration.controller;
 import com.university.registration.entity.Grade;
 import com.university.registration.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -14,38 +16,52 @@ public class GradeController {
     @Autowired
     private GradeService gradeService;
 
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('STUDENT')")
+    public List<Grade> getMyGrades() {
+        return gradeService.getMyGrades();
+    }
+
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','LECTURER')")
     public List<Grade> getAllGrades() {
         return gradeService.getAllGrades();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LECTURER')")
     public Grade getGradeById(@PathVariable Long id) {
         return gradeService.getGradeById(id);
     }
 
     @GetMapping("/student/{studentId}")
+    @PreAuthorize("hasAnyRole('ADMIN','LECTURER','STUDENT')")
     public List<Grade> getGradesByStudentId(@PathVariable Long studentId) {
         return gradeService.getGradesByStudentId(studentId);
     }
 
     @GetMapping("/course/{courseId}")
+    @PreAuthorize("hasAnyRole('ADMIN','LECTURER')")
     public List<Grade> getGradesByCourseId(@PathVariable Long courseId) {
         return gradeService.getGradesByCourseId(courseId);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','LECTURER')")
     public Grade createGrade(@RequestBody Grade grade) {
         return gradeService.saveGrade(grade);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LECTURER')")
     public Grade updateGrade(@PathVariable Long id, @RequestBody Grade grade) {
         return gradeService.updateGrade(id, grade);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteGrade(@PathVariable Long id) {
         gradeService.deleteGrade(id);
     }
+
 }

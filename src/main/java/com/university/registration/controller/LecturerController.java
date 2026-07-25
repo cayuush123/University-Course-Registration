@@ -6,7 +6,9 @@ import com.university.registration.entity.Lecturer;
 import com.university.registration.entity.User;
 import com.university.registration.service.LecturerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ public class LecturerController {
     private LecturerService lecturerService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'LECTURER')")
     public List<LecturerResponseDTO> getAllLecturers() {
         return lecturerService.getAllLecturers().stream()
                 .map(this::convertToResponseDTO)
@@ -26,11 +29,13 @@ public class LecturerController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'LECTURER')")
     public LecturerResponseDTO getLecturerById(@PathVariable Long id) {
         return convertToResponseDTO(lecturerService.getLecturerById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public LecturerResponseDTO createLecturer(@RequestBody LecturerRequestDTO request) {
         Lecturer lecturer = convertToEntity(request);
         Lecturer savedLecturer = lecturerService.saveLecturer(lecturer);
@@ -38,13 +43,16 @@ public class LecturerController {
     }
 
     @PutMapping("/{id}")
-    public LecturerResponseDTO updateLecturer(@PathVariable Long id, @RequestBody LecturerRequestDTO request) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public LecturerResponseDTO updateLecturer(@PathVariable Long id,
+                                              @RequestBody LecturerRequestDTO request) {
         Lecturer lecturer = convertToEntity(request);
         Lecturer updatedLecturer = lecturerService.updateLecturer(id, lecturer);
         return convertToResponseDTO(updatedLecturer);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteLecturer(@PathVariable Long id) {
         lecturerService.deleteLecturer(id);
     }
@@ -55,13 +63,22 @@ public class LecturerController {
         DepartmentResponseDTO deptDTO = null;
         if (lecturer.getDepartment() != null) {
             Department d = lecturer.getDepartment();
-            deptDTO = new DepartmentResponseDTO(d.getDepartmentId(), d.getDepartmentName(), d.getFaculty());
+            deptDTO = new DepartmentResponseDTO(
+                    d.getDepartmentId(),
+                    d.getDepartmentName(),
+                    d.getFaculty()
+            );
         }
 
         UserResponseDTO userDTO = null;
         if (lecturer.getUser() != null) {
             User u = lecturer.getUser();
-            userDTO = new UserResponseDTO(u.getId(), u.getUsername(), u.getEmail(), u.getRole());
+            userDTO = new UserResponseDTO(
+                    u.getId(),
+                    u.getUsername(),
+                    u.getEmail(),
+                    u.getRole()
+            );
         }
 
         return new LecturerResponseDTO(

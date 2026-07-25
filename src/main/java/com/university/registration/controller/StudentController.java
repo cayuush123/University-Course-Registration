@@ -6,7 +6,9 @@ import com.university.registration.entity.Student;
 import com.university.registration.entity.User;
 import com.university.registration.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'LECTURER', 'STUDENT')")
     public List<StudentResponseDTO> getAllStudents() {
         return studentService.getAllStudents().stream()
                 .map(this::convertToResponseDTO)
@@ -26,11 +29,13 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'LECTURER', 'STUDENT')")
     public StudentResponseDTO getStudentById(@PathVariable Long id) {
         return convertToResponseDTO(studentService.getStudentById(id));
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public StudentResponseDTO createStudent(@RequestBody StudentRequestDTO request) {
         Student student = convertToEntity(request);
         Student savedStudent = studentService.saveStudent(student);
@@ -38,6 +43,7 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public StudentResponseDTO updateStudent(@PathVariable Long id, @RequestBody StudentRequestDTO request) {
         Student student = convertToEntity(request);
         Student updatedStudent = studentService.updateStudent(id, student);
@@ -45,6 +51,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
     }
@@ -55,13 +62,22 @@ public class StudentController {
         DepartmentResponseDTO deptDTO = null;
         if (student.getDepartment() != null) {
             Department d = student.getDepartment();
-            deptDTO = new DepartmentResponseDTO(d.getDepartmentId(), d.getDepartmentName(), d.getFaculty());
+            deptDTO = new DepartmentResponseDTO(
+                    d.getDepartmentId(),
+                    d.getDepartmentName(),
+                    d.getFaculty()
+            );
         }
 
         UserResponseDTO userDTO = null;
         if (student.getUser() != null) {
             User u = student.getUser();
-            userDTO = new UserResponseDTO(u.getId(), u.getUsername(), u.getEmail(), u.getRole());
+            userDTO = new UserResponseDTO(
+                    u.getId(),
+                    u.getUsername(),
+                    u.getEmail(),
+                    u.getRole()
+            );
         }
 
         return new StudentResponseDTO(
